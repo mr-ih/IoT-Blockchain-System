@@ -1,0 +1,266 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+
+volumes:
+  napier.orderer.ac.uk:
+  edincollege.orderer.ac.uk:
+  peer0.napier.ac.uk:
+  peer1.napier.ac.uk:
+  peer0.edincollege.ac.uk:
+  peer1.edincollege.ac.uk:
+
+networks:
+  ac-uk:
+    name: ac.uk
+
+services:
+  # Orderer for Napier Organization
+  napier.orderer.ac.uk:
+    container_name:  napier.orderer.ac.uk
+    image: hyperledger/fabric-orderer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=9051
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9056
+      - ORDERER_OPERATIONS_LISTENADDRESS=napier.orderer.ac.uk:9441
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../organizations/ordererOrganizations/orderer.ac.uk/orderers/napier.orderer.ac.uk/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer.ac.uk/orderers/napier.orderer.ac.uk/tls/:/var/hyperledger/orderer/tls
+      - napier.orderer.ac.uk:/var/hyperledger/production/orderer
+    ports:
+      - 9051:9051
+      - 9056:9056
+      - 9442:9441
+    networks:
+      - ac-uk
+
+  # Orderer for EdinCollege Organization
+  edincollege.orderer.ac.uk:
+    container_name: edincollege.orderer.ac.uk
+    image: hyperledger/fabric-orderer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=9052
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+      - ORDERER_ADMIN_TLS_ENABLED=true
+      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:9058
+      - ORDERER_OPERATIONS_LISTENADDRESS=edincollege.orderer.ac.uk:9442
+      - ORDERER_METRICS_PROVIDER=prometheus
+    working_dir: /root
+    command: orderer
+    volumes:
+      - ../organizations/ordererOrganizations/orderer.ac.uk/orderers/edincollege.orderer.ac.uk/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer.ac.uk/orderers/edincollege.orderer.ac.uk/tls/:/var/hyperledger/orderer/tls
+      - edincollege.orderer.ac.uk:/var/hyperledger/production/orderer
+    ports:
+      - 9052:9052
+      - 9058:9058
+      - 9443:9442
+    networks:
+      - ac-uk
+
+  # Peer0 for Napier Organization
+  peer0.napier.ac.uk:
+    container_name: peer0.napier.ac.uk
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.napier.ac.uk
+      - CORE_PEER_ADDRESS=peer0.napier.ac.uk:7051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.napier.ac.uk:7053
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7053
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.napier.ac.uk:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.napier.ac.uk:7051
+      - CORE_PEER_LOCALMSPID=NapierMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.napier.ac.uk:9443
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0napier"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk:/etc/hyperledger/fabric
+      - peer0.napier.ac.uk:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7051:7053
+      - 9444:9443
+    networks:
+      - ac-uk
+
+  # Peer1 for Napier Organization
+  peer1.napier.ac.uk:
+    container_name: peer1.napier.ac.uk
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer1.napier.ac.uk
+      - CORE_PEER_ADDRESS=peer1.napier.ac.uk:7052
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer1.napier.ac.uk:7055
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7055
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.napier.ac.uk:7052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.napier.ac.uk:7052
+      - CORE_PEER_LOCALMSPID=NapierMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.napier.ac.uk:9444
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1napier"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/peerOrganizations/napier.ac.uk/peers/peer1.napier.ac.uk:/etc/hyperledger/fabric
+      - peer1.napier.ac.uk:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 7052:7055
+      - 9445:9444
+    networks:
+      - ac-uk
+
+
+  # Peer0 for EdinCollege Organization
+  peer0.edincollege.ac.uk:
+    container_name: peer0.edincollege.ac.uk
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer0.edincollege.ac.uk
+      - CORE_PEER_ADDRESS=peer0.edincollege.ac.uk:8051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+      - CORE_PEER_CHAINCODEADDRESS=peer0.edincollege.ac.uk:8053
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8053
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.edincollege.ac.uk:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.edincollege.ac.uk:8051
+      - CORE_PEER_LOCALMSPID=EdincollegeMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer0.edincollege.ac.uk:9445
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer0edinc"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk:/etc/hyperledger/fabric
+      - peer0.edincollege.ac.uk:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 8051:8053
+      - 9446:9445
+
+    networks:
+      - ac-uk
+
+  # Peer1 for EdinCollege Organization
+  peer1.edincollege.ac.uk:
+    container_name: peer1.edincollege.ac.uk
+    image: hyperledger/fabric-peer:latest
+    labels:
+      service: hyperledger-fabric
+    environment:
+      - FABRIC_CFG_PATH=/etc/hyperledger/peercfg
+      - FABRIC_LOGGING_SPEC=INFO
+      #- FABRIC_LOGGING_SPEC=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variables
+      - CORE_PEER_ID=peer1.edincollege.ac.uk
+      - CORE_PEER_ADDRESS=peer1.edincollege.ac.uk:8052
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8052
+      - CORE_PEER_CHAINCODEADDRESS=peer1.edincollege.ac.uk:8055
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8055
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.edincollege.ac.uk:8052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.edincollege.ac.uk:8052
+      - CORE_PEER_LOCALMSPID=EdincollegeMSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+      - CORE_OPERATIONS_LISTENADDRESS=peer1.edincollege.ac.uk:9446
+      - CORE_METRICS_PROVIDER=prometheus
+      - CHAINCODE_AS_A_SERVICE_BUILDER_CONFIG={"peername":"peer1edinc"}
+      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    volumes:
+      - ../organizations/peerOrganizations/edincollege.ac.uk/peers/peer1.edincollege.ac.uk:/etc/hyperledger/fabric
+      - peer1.edincollege.ac.uk:/var/hyperledger/production
+    working_dir: /root
+    command: peer node start
+    ports:
+      - 8052:8055
+      - 9447:9446
+    networks:
+      - ac-uk

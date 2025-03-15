@@ -1,0 +1,57 @@
+/* App.css */
+/* Main styles for the IoT Blockchain Sensor Dashboard React application */
+
+.App {
+  /* Center align all content inside the main container */
+  text-align: center;
+}
+
+/* Logo styling */
+.App-logo {
+  /* Set logo height relative to viewport */
+  height: 40vmin;
+  /* Disable pointer events on the logo */
+  pointer-events: none;
+}
+
+/* Animation for the logo if the user has not requested reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    /* Apply a continuous spin animation to the logo */
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* Header styling */
+.App-header {
+  /* Dark background for header */
+  background-color: #282c34;
+  /* Ensure the header takes at least the full viewport height */
+  min-height: 100vh;
+  /* Flexbox for vertical alignment */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Responsive font size based on viewport */
+  font-size: calc(10px + 2vmin);
+  /* White text color for contrast */
+  color: white;
+}
+
+/* Link styling within the app */
+.App-link {
+  /* Set link color to a contrasting blue */
+  color: #61dafb;
+}
+
+/* Keyframes for logo spin animation */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
