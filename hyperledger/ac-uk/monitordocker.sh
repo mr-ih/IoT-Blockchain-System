@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This script uses the logspout and http stream tools to let you watch the docker containers
 # in action.
@@ -6,7 +6,7 @@
 # More information at https://github.com/gliderlabs/logspout/tree/master/httpstream
 
 if [ -z "$1" ]; then
-   DOCKER_NETWORK=ac-uk
+   DOCKER_NETWORK= ac.uk
 else
    DOCKER_NETWORK="$1"
 fi

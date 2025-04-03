@@ -1,0 +1,57 @@
+
+
+volumes:
+  pgdata:
+  walletstore:
+
+networks:
+  ac.uk:
+    name: explorer_network
+
+services:
+
+  explorerdb.ac.uk:
+    image: ghcr.io/hyperledger-labs/explorer-db:latest
+    container_name: explorerdb.ac.uk
+    hostname: explorerdb.ac.uk
+    environment:
+      - DATABASE_DATABASE=fabricexplorer
+      - DATABASE_USERNAME=hppoc
+      - DATABASE_PASSWORD=password
+    healthcheck:
+      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ac.uk
+
+  explorer.ac.uk:
+    image: ghcr.io/hyperledger-labs/explorer:latest
+    container_name: explorer.ac.uk
+    hostname: explorer.ac.uk
+    environment:
+      - DATABASE_HOST=explorerdb.ac.uk
+      - DATABASE_DATABASE=fabricexplorer
+      - DATABASE_USERNAME=hppoc
+      - DATABASE_PASSWD=password
+      - LOG_LEVEL_APP=info
+      - LOG_LEVEL_DB=info
+      - LOG_LEVEL_CONSOLE=debug
+      - LOG_CONSOLE_STDOUT=true
+      - DISCOVERY_AS_LOCALHOST=false
+      - PORT=8080
+    volumes:
+      - ./config.json:/opt/explorer/app/platform/fabric/config.json
+      - ./connection-profile:/opt/explorer/app/platform/fabric/connection-profile
+      - ../organizations:/tmp/crypto
+      - walletstore:/opt/explorer/wallet
+    ports:
+      - 8080:8080
+    depends_on:
+      explorerdb.ac.uk:
+        condition: service_healthy
+    networks:
+      - ac.uk

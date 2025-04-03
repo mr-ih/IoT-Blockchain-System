@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 function createnapier() {
   infoln "Enrolling the CA admin"
@@ -7,7 +7,7 @@ function createnapier() {
   export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/napier.ac.uk/
 
   set -x
-  fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-napier --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client enroll -u https://admin:adminpw@localhost:7054 --caname ca-napier --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   echo 'NodeOUs:
@@ -29,41 +29,41 @@ function createnapier() {
 
   # Copy napier's CA cert to napier's /msp/tlscacerts directory (for use in the channel MSP definition)
   mkdir -p "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/tlscacerts"
-  cp "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/tlscacerts/ca.crt"
+  cp "${PWD}/organizations/fabric-ca/napier/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/tlscacerts/ca.crt"
 
   # Copy napier's CA cert to napier's /tlsca directory (for use by clients)
   mkdir -p "${PWD}/organizations/peerOrganizations/napier.ac.uk/tlsca"
-  cp "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/tlsca/tlsca.napier.ac.uk-cert.pem"
+  cp "${PWD}/organizations/fabric-ca/napier/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/tlsca/tlsca.napier.ac.uk-cert.pem"
 
   # Copy napier's CA cert to napier's /ca directory (for use by clients)
   mkdir -p "${PWD}/organizations/peerOrganizations/napier.ac.uk/ca"
-  cp "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/ca/ca.napier.ac.uk-cert.pem"
+  cp "${PWD}/organizations/fabric-ca/napier/ca-cert.pem" "${PWD}/organizations/peerOrganizations/napier.ac.uk/ca/ca.napier.ac.uk-cert.pem"
 
   infoln "Registering peer0"
   set -x
-  fabric-ca-client register --caname ca-napier --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client register --caname ca-napier --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering user"
   set -x
-  fabric-ca-client register --caname ca-napier --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client register --caname ca-napier --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering the org admin"
   set -x
-  fabric-ca-client register --caname ca-napier --id.name napieradmin --id.secret napieradminpw --id.type admin --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client register --caname ca-napier --id.name napieradmin --id.secret napieradminpw --id.type admin --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Generating the peer0 msp"
   set -x
-  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/msp/config.yaml"
 
   infoln "Generating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names"
   set -x
-  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/tls" --enrollment.profile tls --csr.hosts peer0.napier.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/tls" --enrollment.profile tls --csr.hosts peer0.napier.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   # Copy the tls CA cert, server cert, server keystore to well known file names in the peer's tls directory that are referenced by peer startup config
@@ -73,14 +73,14 @@ function createnapier() {
 
   infoln "Generating the user msp"
   set -x
-  fabric-ca-client enroll -u https://user1:user1pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/User1@napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client enroll -u https://user1:user1pw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/User1@napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/User1@napier.ac.uk/msp/config.yaml"
 
   infoln "Generating the org admin msp"
   set -x
-  fabric-ca-client enroll -u https://napieradmin:napieradminpw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/Admin@napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+  fabric-ca-client enroll -u https://napieradmin:napieradminpw@localhost:7054 --caname ca-napier -M "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/Admin@napier.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/napier.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/napier.ac.uk/users/Admin@napier.ac.uk/msp/config.yaml"
@@ -93,7 +93,7 @@ function createedincollege() {
   export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/peerOrganizations/edincollege.ac.uk/
 
   set -x
-  fabric-ca-client enroll -u https://admin:adminpw@localhost:8054 --caname ca-edincollege--tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client enroll -u https://admin:adminpw@localhost:8054 --caname ca-edincollege --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   echo 'NodeOUs:
@@ -127,29 +127,29 @@ function createedincollege() {
 
   infoln "Registering peer0"
   set -x
-  fabric-ca-client register --caname ca-edincollege--id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client register --caname ca-edincollege --id.name peer0 --id.secret peer0pw --id.type peer --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering user"
   set -x
-  fabric-ca-client register --caname ca-edincollege--id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client register --caname ca-edincollege --id.name user1 --id.secret user1pw --id.type client --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Registering the org admin"
   set -x
-  fabric-ca-client register --caname ca-edincollege--id.name edincollegeadmin --id.secret edincollegeadminpw --id.type admin --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client register --caname ca-edincollege --id.name edincollegeadmin --id.secret edincollegeadminpw --id.type admin --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   infoln "Generating the peer0 msp"
   set -x
-  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-edincollege-M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-edincollege -M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk/msp/config.yaml"
 
   infoln "Generating the peer0-tls certificates, use --csr.hosts to specify Subject Alternative Names"
   set -x
-  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-edincollege-M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk/tls" --enrollment.profile tls --csr.hosts peer0.edincollege.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client enroll -u https://peer0:peer0pw@localhost:8054 --caname ca-edincollege -M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/peers/peer0.edincollege.ac.uk/tls" --enrollment.profile tls --csr.hosts peer0.edincollege.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   # Copy the tls CA cert, server cert, server keystore to well known file names in the peer's tls directory that are referenced by peer startup config
@@ -159,14 +159,14 @@ function createedincollege() {
 
   infoln "Generating the user msp"
   set -x
-  fabric-ca-client enroll -u https://user1:user1pw@localhost:8054 --caname ca-edincollege-M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/User1@edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client enroll -u https://user1:user1pw@localhost:8054 --caname ca-edincollege -M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/User1@edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/User1@edincollege.ac.uk/msp/config.yaml"
 
   infoln "Generating the org admin msp"
   set -x
-  fabric-ca-client enroll -u https://edincollegeadmin:edincollegeadminpw@localhost:8054 --caname ca-edincollege-M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/Admin@edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
+  fabric-ca-client enroll -u https://edincollegeadmin:edincollegeadminpw@localhost:8054 --caname ca-edincollege -M "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/Admin@edincollege.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/edincollege/ca-cert.pem"
   { set +x; } 2>/dev/null
 
   cp "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/msp/config.yaml" "${PWD}/organizations/peerOrganizations/edincollege.ac.uk/users/Admin@edincollege.ac.uk/msp/config.yaml"
@@ -174,9 +174,9 @@ function createedincollege() {
 
 function createOrderer() {
   infoln "Enrolling the CA admin"
-  mkdir -p organizations/ordererOrganizations/orderer.ac.uk
+  mkdir -p organizations/ordererOrganizations/ac.uk
 
-  export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/ordererOrganizations/orderer.ac.uk
+  export FABRIC_CA_CLIENT_HOME=${PWD}/organizations/ordererOrganizations/ac.uk
 
   set -x
   fabric-ca-client enroll -u https://admin:adminpw@localhost:9054 --caname ca-orderer --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
@@ -195,20 +195,20 @@ function createOrderer() {
     OrganizationalUnitIdentifier: admin
   OrdererOUIdentifier:
     Certificate: cacerts/localhost-9054-ca-orderer.pem
-    OrganizationalUnitIdentifier: orderer' > "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/msp/config.yaml"
+    OrganizationalUnitIdentifier: orderer' > "${PWD}/organizations/ordererOrganizations/ac.uk/msp/config.yaml"
 
   # Since the CA serves as both the organization CA and TLS CA, copy the org's root cert that was generated by CA startup into the org level ca and tlsca directories
 
   # Copy orderer org's CA cert to orderer org's /msp/tlscacerts directory (for use in the channel MSP definition)
-  mkdir -p "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/msp/tlscacerts"
-  cp "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem" "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/msp/tlscacerts/tlsca.orderer.ac.uk-cert.pem"
+  mkdir -p "${PWD}/organizations/ordererOrganizations/ac.uk/msp/tlscacerts"
+  cp "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem" "${PWD}/organizations/ordererOrganizations/ac.uk/msp/tlscacerts/tlsca.ac.uk-cert.pem"
 
   # Copy orderer org's CA cert to orderer org's /tlsca directory (for use by clients)
-  mkdir -p "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/tlsca"
-  cp "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem" "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/tlsca/tlsca.orderer.ac.uk-cert.pem"
+  mkdir -p "${PWD}/organizations/ordererOrganizations/ac.uk/tlsca"
+  cp "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem" "${PWD}/organizations/ordererOrganizations/ac.uk/tlsca/tlsca.ac.uk-cert.pem"
 
 # Loop through each orderer (orderer, orderer2, orderer3, orderer4) to register and generate artifacts
-  for ORDERER in orderer orderer2; do
+  for ORDERER in orderer orderer2 orderer3 orderer4; do
     infoln "Registering ${ORDERER}"
     set -x
     fabric-ca-client register --caname ca-orderer --id.name ${ORDERER} --id.secret ${ORDERER}pw --id.type orderer --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
@@ -216,27 +216,27 @@ function createOrderer() {
 
     infoln "Generating the ${ORDERER} MSP"
     set -x
-    fabric-ca-client enroll -u https://${ORDERER}:${ORDERER}pw@localhost:9054 --caname ca-orderer -M "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
+    fabric-ca-client enroll -u https://${ORDERER}:${ORDERER}pw@localhost:9054 --caname ca-orderer -M "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
     { set +x; } 2>/dev/null
 
-    cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/msp/config.yaml" "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp/config.yaml"
+    cp "${PWD}/organizations/ordererOrganizations/ac.uk/msp/config.yaml" "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp/config.yaml"
 
     # Workaround: Rename the signcert file to ensure consistency with Cryptogen generated artifacts
-    mv "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp/signcerts/cert.pem" "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp/signcerts/${ORDERER}.orderer.ac.uk-cert.pem"
+    mv "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp/signcerts/cert.pem" "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp/signcerts/${ORDERER}.ac.uk-cert.pem"
 
     infoln "Generating the ${ORDERER} TLS certificates, use --csr.hosts to specify Subject Alternative Names"
     set -x
-    fabric-ca-client enroll -u https://${ORDERER}:${ORDERER}pw@localhost:9054 --caname ca-orderer -M "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls" --enrollment.profile tls --csr.hosts ${ORDERER}.orderer.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
+    fabric-ca-client enroll -u https://${ORDERER}:${ORDERER}pw@localhost:9054 --caname ca-orderer -M "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls" --enrollment.profile tls --csr.hosts ${ORDERER}.ac.uk --csr.hosts localhost --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
     { set +x; } 2>/dev/null
 
     # Copy the tls CA cert, server cert, server keystore to well known file names in the orderer's tls directory that are referenced by orderer startup config
-    cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/tlscacerts/"* "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/ca.crt"
-    cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/signcerts/"* "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/server.crt"
-    cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/keystore/"* "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/server.key"
+    cp "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/tlscacerts/"* "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/ca.crt"
+    cp "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/signcerts/"* "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/server.crt"
+    cp "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/keystore/"* "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/server.key"
 
     # Copy orderer org's CA cert to orderer's /msp/tlscacerts directory (for use in the orderer MSP definition)
-    mkdir -p "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp/tlscacerts"
-    cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/tls/tlscacerts/"* "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/orderers/${ORDERER}.orderer.ac.uk/msp/tlscacerts/tlsca.orderer.ac.uk-cert.pem"
+    mkdir -p "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp/tlscacerts"
+    cp "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/tls/tlscacerts/"* "${PWD}/organizations/ordererOrganizations/ac.uk/orderers/${ORDERER}.ac.uk/msp/tlscacerts/tlsca.ac.uk-cert.pem"
   done
 
   # Register and generate artifacts for the orderer admin
@@ -247,8 +247,8 @@ function createOrderer() {
 
   infoln "Generating the admin msp"
   set -x
-  fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:9054 --caname ca.orderer.ac.uk -M "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/users/Admin@orderer.ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
+  fabric-ca-client enroll -u https://ordererAdmin:ordererAdminpw@localhost:9054 --caname ca-orderer -M "${PWD}/organizations/ordererOrganizations/ac.uk/users/Admin@ac.uk/msp" --tls.certfiles "${PWD}/organizations/fabric-ca/ordererOrg/ca-cert.pem"
   { set +x; } 2>/dev/null
 
-  cp "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/msp/config.yaml" "${PWD}/organizations/ordererOrganizations/orderer.ac.uk/users/Admin@orderer.ac.uk/msp/config.yaml"
+  cp "${PWD}/organizations/ordererOrganizations/ac.uk/msp/config.yaml" "${PWD}/organizations/ordererOrganizations/ac.uk/users/Admin@ac.uk/msp/config.yaml"
 }

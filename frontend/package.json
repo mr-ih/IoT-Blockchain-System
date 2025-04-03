@@ -1,23 +1,36 @@
 {
-  "name": "sensor-dashboard",
-  "version": "0.1.0",
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Frontend application for the IoT Blockchain Dashboard",
   "private": true,
-  "dependencies": {
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.7.9",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4"
-  },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=3456 react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "eslint 'src/**/*.{js,jsx}'",
+    "format": "prettier --write 'src/**/*.{js,jsx,css,json,md}'",
+    "audit:fix": "npm audit fix"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "axios": "^1.0.0",
+    "cdbreact": "latest",
+    "chart.js": "latest",
+    "flowbite-react": "latest",
+    "react": "latest",
+    "react-chartjs-2": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest",
+    "react-scripts": "^5.0.1",
+    "web-vitals": "latest"
+  },
+  "devDependencies": {
+    "cross-env": "latest",
+    "eslint": "latest",
+    "prettier": "latest"
   },
   "eslintConfig": {
     "extends": [
@@ -36,5 +49,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "keywords": [
+    "react",
+    "frontend",
+    "iot",
+    "dashboard",
+    "blockchain"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/your-repo.git"
+  },
+  "author": "Your Name",
+  "license": "MIT"
 }

@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "IoT Security",
+  "name": "IoT Blockchain Security App",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/dashboard",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1E90FF",
+  "background_color": "#f0f0f0",
+  "description": "A blockchain-integrated IoT security app for monitoring and managing device safety and data integrity."
 }

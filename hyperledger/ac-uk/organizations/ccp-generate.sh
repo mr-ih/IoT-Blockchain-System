@@ -1,79 +1,57 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Convert a PEM file into a single line string with embedded newline escape sequences.
 function one_line_pem {
-    # For every non-empty line, print the line followed by a literal "\n".
-    awk 'NF {printf "%s\\n", $0}' "$1"
+    echo "`awk 'NF {sub(/\\n/, ""); printf "%s\\\\\\\n",$0;}' $1`"
 }
 
-# Escape special characters for safe sed replacement.
-function escape_sed {
-    # Escape characters like "/" and "&" so they don't interfere with sed's replacement.
-    echo "$1" | sed -e 's/[\/&]/\\&/g'
-}
-
-# Generate the JSON connection profile.
-# Parameters:
-#   1. Organization number/index
-#   2. Peer0 port
-#   3. CA port
-#   4. Path to the Peer TLS certificate (PEERPEM)
-#   5. Path to the CA certificate (CAPEM)
 function json_ccp {
-    local PP=$(one_line_pem "$4")
-    local CP=$(one_line_pem "$5")
-    local escaped_PP=$(escape_sed "$PP")
-    local escaped_CP=$(escape_sed "$CP")
+    local PP=$(one_line_pem $4)
+    local CP=$(one_line_pem $5)
     sed -e "s/\${ORG}/$1/" \
         -e "s/\${P0PORT}/$2/" \
         -e "s/\${CAPORT}/$3/" \
-        -e "s#\${PEERPEM}#$escaped_PP#" \
-        -e "s#\${CAPEM}#$escaped_CP#" \
-        "$BASE_DIR/ccp-template.json"
+        -e "s#\${PEERPEM}#$PP#" \
+        -e "s#\${CAPEM}#$CP#" \
+        organizations/ccp-template.json
 }
 
-# Generate the YAML connection profile.
 function yaml_ccp {
-    local PP=$(one_line_pem "$4")
-    local CP=$(one_line_pem "$5")
-    local escaped_PP=$(escape_sed "$PP")
-    local escaped_CP=$(escape_sed "$CP")
+    local PP=$(one_line_pem $4)
+    local CP=$(one_line_pem $5)
     sed -e "s/\${ORG}/$1/" \
         -e "s/\${P0PORT}/$2/" \
         -e "s/\${CAPORT}/$3/" \
-        -e "s#\${PEERPEM}#$escaped_PP#" \
-        -e "s#\${CAPEM}#$escaped_CP#" \
-        "$BASE_DIR/ccp-template.yaml" | sed -e $'s/\\n/\\\n          /g'
+        -e "s#\${PEERPEM}#$PP#" \
+        -e "s#\${CAPEM}#$CP#" \
+        organizations/ccp-template.yaml | sed -e $'s/\\\\n/\\\n          /g'
 }
 
-# Base directory for configuration templates and organizations.
-BASE_DIR="organizations"
-PEER_ORG_DIR="$BASE_DIR/peerOrganizations"
-
-#############################
-# Organization 1 Settings   #
-#############################
-ORG_NUM=1
+#--------------------------------------------------
+# Configuration for Napier
+# For Napier, set ORGMSP to NapierMSP so that "mspid" becomes "NapierMSP"
+ORG=napier
 P0PORT=7051
 CAPORT=7054
-ORG_DOMAIN="napier.ac.uk"
-PEERPEM="$PEER_ORG_DIR/$ORG_DOMAIN/tlsca/tlsca.$ORG_DOMAIN-cert.pem"
-CAPEM="$PEER_ORG_DIR/$ORG_DOMAIN/ca/ca.$ORG_DOMAIN-cert.pem"
+PEERPEM=organizations/peerOrganizations/napier.ac.uk/tlsca/tlsca.napier.ac.uk-cert.pem
+CAPEM=organizations/peerOrganizations/napier.ac.uk/ca/ca.napier.ac.uk-cert.pem
+# Replace the MSP placeholder manually inside the generated file if needed.
+# One method is to post-process the file, for example:
+TMPJSON=$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)
+echo "${TMPJSON//Org${ORG}MSP/NapierMSP}" > organizations/peerOrganizations/napier.ac.uk/connection-napier.json
 
-# Generate connection profiles for Organization 1.
-json_ccp $ORG_NUM $P0PORT $CAPORT "$PEERPEM" "$CAPEM" > "$PEER_ORG_DIR/$ORG_DOMAIN/connection-$ORG_DOMAIN.json"
-yaml_ccp $ORG_NUM $P0PORT $CAPORT "$PEERPEM" "$CAPEM" > "$PEER_ORG_DIR/$ORG_DOMAIN/connection-$ORG_DOMAIN.yaml"
+TMPYAML=$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)
+echo "${TMPYAML//Org${ORG}MSP/NapierMSP}" > organizations/peerOrganizations/napier.ac.uk/connection-napier.yaml
 
-#############################
-# Organization 2 Settings   #
-#############################
-ORG_NUM=2
-P0PORT=8051
+#--------------------------------------------------
+# Configuration for Edincollege
+# For Edincollege, set ORGMSP to EdincollegeMSP so that "mspid" becomes "EdincollegeMSP"
+ORG=edincollege
+P0PORT=9051
 CAPORT=8054
-ORG_DOMAIN="edincollege.ac.uk"
-PEERPEM="$PEER_ORG_DIR/$ORG_DOMAIN/tlsca/tlsca.$ORG_DOMAIN-cert.pem"
-CAPEM="$PEER_ORG_DIR/$ORG_DOMAIN/ca/ca.$ORG_DOMAIN-cert.pem"
+PEERPEM=organizations/peerOrganizations/edincollege.ac.uk/tlsca/tlsca.edincollege.ac.uk-cert.pem
+CAPEM=organizations/peerOrganizations/edincollege.ac.uk/ca/ca.edincollege.ac.uk-cert.pem
+TMPJSON=$(json_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)
+echo "${TMPJSON//Org${ORG}MSP/EdincollegeMSP}" > organizations/peerOrganizations/edincollege.ac.uk/connection-edincollege.json
 
-# Generate connection profiles for Organization 2.
-json_ccp $ORG_NUM $P0PORT $CAPORT "$PEERPEM" "$CAPEM" > "$PEER_ORG_DIR/$ORG_DOMAIN/connection-$ORG_DOMAIN.json"
-yaml_ccp $ORG_NUM $P0PORT $CAPORT "$PEERPEM" "$CAPEM" > "$PEER_ORG_DIR/$ORG_DOMAIN/connection-$ORG_DOMAIN.yaml"
+TMPYAML=$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)
+echo "${TMPYAML//Org${ORG}MSP/EdincollegeMSP}" > organizations/peerOrganizations/edincollege.ac.uk/connection-edincollege.yaml

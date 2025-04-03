@@ -7,24 +7,15 @@ scrape_configs:
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]
-  - job_name: "orderer.nap"
+  - job_name: "orderer"
     static_configs:
-      - targets: ["napier.orderer.ac.uk:9443"]
-  - job_name: "orderer.edin"
+      - targets: ["orderer.ac.uk:9443"]
+  - job_name: "peer0_napier"
     static_configs:
-      - targets: ["edincollege.orderer.ac.uk:9440"]
-  - job_name: "peer0_nap"
+      - targets: ["peer0.napier.ac.uk:9444"]
+  - job_name: "peer0_edincollege"
     static_configs:
-      - targets: ["peer0.napier.ac.uk:7051"]
-  - job_name: "peer1_nap"
-    static_configs:
-      - targets: ["peer1.napier.ac.uk:7052"]
-  - job_name: "peer0_edin"
-    static_configs:
-      - targets: ["peer0.edincollege.ac.uk:8051"]
-  - job_name: "peer1_edin"
-    static_configs:
-      - targets: ["peer1.edincollege.ac.uk:8052"]
+      - targets: ["peer0.edincollege.ac.uk:9445"]
   - job_name: cadvisor
     scrape_interval: 5s
     static_configs:

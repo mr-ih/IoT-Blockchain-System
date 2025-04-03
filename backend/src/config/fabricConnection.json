@@ -1,0 +1,117 @@
+{
+  "name": "fabric-network",
+  "version": "1.0.0",
+  "client": {
+    "organization": "NapierMSP",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        },
+        "orderer": "300"
+      }
+    }
+  },
+  "organizations": {
+    "NapierMSP": {
+      "mspid": "NapierMSP",
+      "mspDir": "/path/to/msp",
+      "peers": [
+        "peer0.napier.ac.uk",
+        "peer1.napier.ac.uk"
+      ]
+    },
+    "EdincollegeMSP": {
+      "mspid": "EdincollegeMSP",
+      "mspDir": "/path/to/msp",
+      "peers": [
+        "peer0.edincollege.ac.uk",
+        "peer1.edincollege.ac.uk"
+      ]
+    },
+    "OrdererOrg": {
+      "mspid": "OrdererMSP",
+      "mspDir": "/path/to/msp"
+    }
+  },
+  "orderers": {
+    "napier.orderer.ac.uk": {
+      "url": "grpcs://napier.orderer.ac.uk:9051",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "napier.orderer.ac.uk"
+      }
+    },
+    "edincollege.orderer.ac.uk": {
+      "url": "grpcs://edincollege.orderer.ac.uk:9052",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "edincollege.orderer.ac.uk"
+      }
+    }
+  },
+  "peers": {
+    "peer0.napier.ac.uk": {
+      "url": "grpcs://peer0.napier.ac.uk:7051",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.napier.ac.uk"
+      }
+    },
+    "peer1.napier.ac.uk": {
+      "url": "grpcs://peer1.napier.ac.uk:7052",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.napier.ac.uk"
+      }
+    },
+    "peer0.edincollege.ac.uk": {
+      "url": "grpcs://peer0.edincollege.ac.uk:8051",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.edincollege.ac.uk"
+      }
+    },
+    "peer1.edincollege.ac.uk": {
+      "url": "grpcs://peer1.edincollege.ac.uk:8052",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer1.edincollege.ac.uk"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca.napier.ac.uk": {
+      "url": "https://ca.napier.ac.uk:7054",
+      "caName": "ca-napier",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    },
+    "ca.edincollege.ac.uk": {
+      "url": "https://ca.edincollege.ac.uk:8054",
+      "caName": "ca-edincollege",
+      "tlsCACerts": {
+        "path": "/new/path/to/tls.cert"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

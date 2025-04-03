@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+IoT Security Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is designed to monitor and manage IoT device security metrics, such as availability, integrity, mobility, network activity, and overall security performance. The project integrates with Contiki-NG and Cooja simulation for sensor data and uses React for the frontend.
 
-## Available Scripts
+Features
+- Modules for Security Analysis:
+- Availability monitoring
+- Data integrity checks
+- Device mobility tracking
+- Network activity analysis
+- Security event detection and management
 
+Visualisations:
+Bar charts for comparisons of attempts.
+Line charts for trends over multiple attempts.
+Scatter plots for correlation analysis.
+Real-Time Updates: The dashboard fetches live data from backend APIs at regular intervals.
+
+Tech Stack
+Frontend: React, React Router, Chart.js
+Backend: Node.js, Express.js
+Simulation Tools: Contiki-NG, Cooja
+API Integration: Axios
+Available Scripts
 In the project directory, you can run:
 
-### `npm start`
+npm start
+Runs the app in development mode.
+Open http://localhost:3000 to view it in your browser.
+Live data updates are simulated from the backend.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+npm test
+Launches the test runner in interactive mode to test the frontend components and ensure they are functioning correctly.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+npm run build
+Builds the app for production in the build folder.
+Optimised for the best performance and ready for deployment.
 
-### `npm test`
+Project Structure
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+├── src/
+│   ├── App.js                  // Main entry point for the React app
+│   ├── components/             // Individual React components
+│   │   ├── Sidebar.js          // Sidebar navigation
+│   │   ├── charts/             // Chart components (bar, line, scatter)
+│   ├── modules/                // Modules for different security metrics
+│   │   ├── Module1.js          // Availability
+│   │   ├── Module2.js          // Integrity
+│   │   ├── Module3.js          // Mobility
+│   │   ├── Module4.js          // Network
+│   │   ├── Module5.js          // Security
+│   ├── assets/                 // Static assets (images, icons, etc.)
+│   ├── styles/                 // Stylesheets (CSS files)
+│   ├── utils/                  // Helper functions
+│   └── api.routes.js                // Entry point for rendering the app
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Deployment
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To deploy this app, use the following steps:
 
-### `npm run eject`
+Build the production version: npm run build
+Deploy the build folder to your web server or cloud provider (e.g., Netlify, AWS S3).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Backend Integration
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The backend exposes APIs for fetching IoT metrics. Each module corresponds to an API endpoint:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Module 1 (Availability): /api/module/comp1
+Module 2 (Integrity): /api/module/comp2
+Module 3 (Mobility): /api/module/comp3
+Module 4 (Network): /api/module/comp4
+Module 5 (Security): /api/module/comp5
+API requests are authenticated using organisation-specific keys.
 
-## Learn More
+Learn More
+To learn more about this project and its integration with Contiki-NG and Cooja simulation, refer to the respective Contiki-NG documentation.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+For React-related documentation:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+React Documentation
+Chart.js Documentation

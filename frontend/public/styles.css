@@ -1,0 +1,7 @@
+/* Theme: Global Variables */
+:root {
+    --font-family: 'Roboto', Arial, Helvetica, sans-serif;
+    --primary-color: #0078d7; /* Enhanced for a vibrant look */
+    --primary-color-hover: #0053a6; /* Improved hover effect */
+    --background-color: #e6f2ff; /* Softer and more modern background */
+}

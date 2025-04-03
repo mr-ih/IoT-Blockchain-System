@@ -1,0 +1,63 @@
+---
+name: "edincollege-ac-uk"
+version: 1.0.0
+client:
+  organization: "edincollege"
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  Orgedincollege:
+    mspid: "${ORGMSP}"
+    peers:
+      - peer0.edincollege.ac.uk
+    certificateAuthorities:
+      - ca.edincollege.ac.uk
+peers:
+  peer0.edincollege.ac.uk:
+    url: grpcs://localhost:9051
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+          MIICJTCCAcugAwIBAgIUKTgtKezr6maDhKTJ1vRVHjh3NUcwCgYIKoZIzj0EAwIw
+          bzELMAkGA1UEBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGlu
+          YnVyZ2gxGjAYBgNVBAoTEWVkaW5jb2xsZWdlLmFjLnVrMR0wGwYDVQQDExRjYS5l
+          ZGluY29sbGVnZS5hYy51azAeFw0yNTAzMzEwMjM2MDBaFw00MDAzMjcwMjM2MDBa
+          MG8xCzAJBgNVBAYTAlVLMREwDwYDVQQIEwhTY290bGFuZDESMBAGA1UEBxMJRWRp
+          bmJ1cmdoMRowGAYDVQQKExFlZGluY29sbGVnZS5hYy51azEdMBsGA1UEAxMUY2Eu
+          ZWRpbmNvbGxlZ2UuYWMudWswWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATGlGGY
+          FidFoDutU5wDHSNc2DX8yXFhCSXLiDRulQTnihZBuyIO9uSAuV8p8yS5wFMwTp2H
+          iSGIc89NN+oLRKdOo0UwQzAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB
+          /wIBATAdBgNVHQ4EFgQU9Nt8OH7KH+dlyyDsptxGwjrMss8wCgYIKoZIzj0EAwID
+          SAAwRQIhAIlmROJhoeJCydsLzrNqC9UXVUzZIMX7V5i4FmF3nCojAiB7RgvsVBK+
+          4D4QVXCdlbtmUDjS/qburqG2vVUgDoNiqQ==
+          -----END CERTIFICATE-----
+          
+    grpcOptions:
+      ssl-target-name-override: peer0.edincollege.ac.uk
+      hostnameOverride: peer0.edincollege.ac.uk
+certificateAuthorities:
+  ca.edincollege.ac.uk:
+    url: https://localhost:8054
+    caName: ca-edincollege
+    tlsCACerts:
+      pem:
+        - |
+          -----BEGIN CERTIFICATE-----
+          MIICJTCCAcugAwIBAgIUKTgtKezr6maDhKTJ1vRVHjh3NUcwCgYIKoZIzj0EAwIw
+          bzELMAkGA1UEBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGlu
+          YnVyZ2gxGjAYBgNVBAoTEWVkaW5jb2xsZWdlLmFjLnVrMR0wGwYDVQQDExRjYS5l
+          ZGluY29sbGVnZS5hYy51azAeFw0yNTAzMzEwMjM2MDBaFw00MDAzMjcwMjM2MDBa
+          MG8xCzAJBgNVBAYTAlVLMREwDwYDVQQIEwhTY290bGFuZDESMBAGA1UEBxMJRWRp
+          bmJ1cmdoMRowGAYDVQQKExFlZGluY29sbGVnZS5hYy51azEdMBsGA1UEAxMUY2Eu
+          ZWRpbmNvbGxlZ2UuYWMudWswWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATGlGGY
+          FidFoDutU5wDHSNc2DX8yXFhCSXLiDRulQTnihZBuyIO9uSAuV8p8yS5wFMwTp2H
+          iSGIc89NN+oLRKdOo0UwQzAOBgNVHQ8BAf8EBAMCAQYwEgYDVR0TAQH/BAgwBgEB
+          /wIBATAdBgNVHQ4EFgQU9Nt8OH7KH+dlyyDsptxGwjrMss8wCgYIKoZIzj0EAwID
+          SAAwRQIhAIlmROJhoeJCydsLzrNqC9UXVUzZIMX7V5i4FmF3nCojAiB7RgvsVBK+
+          4D4QVXCdlbtmUDjS/qburqG2vVUgDoNiqQ==
+          -----END CERTIFICATE-----
+          
+    httpOptions:
+      verify: false

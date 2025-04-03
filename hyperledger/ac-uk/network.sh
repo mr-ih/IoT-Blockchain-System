@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright IBM Corp All Rights Reserved
 #
@@ -19,7 +19,7 @@
 
 ROOTDIR=$(cd "$(dirname "$0")" && pwd)
 export PATH=${ROOTDIR}/../bin:${PWD}/../bin:$PATH
-export FABRIC_CFG_PATH=${PWD}/../config
+export FABRIC_CFG_PATH=${PWD}/configtx
 export VERBOSE=false
 
 # push to the required directory & set a trap to go back if needed
@@ -96,7 +96,7 @@ function checkPrereqs() {
 
   ## check for cfssl binaries
   if [ "$CRYPTO" == "cfssl" ]; then
-
+  
     cfssl version > /dev/null 2>&1
     if [[ $? -ne 0 ]]; then
       errorln "cfssl binary not found.."
@@ -207,23 +207,17 @@ function createOrgs() {
     peer_cert peer peer0.napier.ac.uk napier
     peer_cert admin Admin@napier.ac.uk napier
 
-    peer_cert peer peer1.napier.ac.uk napier
-    peer_cert admin Admin@napier.ac.uk napier
-
     infoln "Creating edincollege Identities"
     #function_name cert-type   CN   org
     peer_cert peer peer0.edincollege.ac.uk edincollege
     peer_cert admin Admin@edincollege.ac.uk edincollege
 
     infoln "Creating Orderer Org Identities"
-    #function_name cert-type   CN
-    orderer_cert orderer napier.orderer.ac.uk
-    orderer_cert admin Admin@enapier.orderer.ac.uk
+    #function_name cert-type   CN   
+    orderer_cert orderer orderer.ac.uk
+    orderer_cert admin Admin@ac.uk
 
-    orderer_cert orderer edincollege.orderer.ac.uk
-    orderer_cert admin Admin@eedincollege.orderer.ac.uk
-
-  fi
+  fi 
 
   # Create crypto material using Fabric CA
   if [ "$CRYPTO" == "Certificate Authorities" ]; then
@@ -249,7 +243,7 @@ function createOrgs() {
     while [[ $rc -ne 0 && $COUNTER -lt $MAX_RETRY ]]; do
       sleep 1
       set -x
-      fabric-ca-client getcainfo -u https://admin:adminpw@localhost:7054 --caname ca-napier --tls.certfiles "${PWD}/organizations/fabric-ca/napier.ac.uk/ca-cert.pem"
+      fabric-ca-client getcainfo -u https://admin:adminpw@localhost:7054 --caname ca-napier --tls.certfiles "${PWD}/organizations/fabric-ca/napier/ca-cert.pem"
       res=$?
     { set +x; } 2>/dev/null
     rc=$res  # Update rc
@@ -407,7 +401,7 @@ function listChaincode() {
 
 }
 
-## Call the script to invoke
+## Call the script to invoke 
 function invokeChaincode() {
 
   export FABRIC_CFG_PATH=${PWD}/../config
@@ -421,11 +415,11 @@ function invokeChaincode() {
 
 }
 
-## Call the script to query chaincode
+## Call the script to query chaincode 
 function queryChaincode() {
 
   export FABRIC_CFG_PATH=${PWD}/../config
-
+  
   . scripts/envVar.sh
   . scripts/ccutils.sh
 
@@ -464,7 +458,7 @@ function networkDown() {
   # Don't remove the generated artifacts -- note, the ledgers are always removed
   if [ "$MODE" != "restart" ]; then
     # Bring down the network, deleting the volumes
-    ${CONTAINER_CLI} volume rm docker_napier.orderer.ac.uk docker_edincollege.orderer.ac.uk docker_peer0.napier.ac.uk docker_peer1.napier.ac.uk docker_peer0.edincollege.ac.uk docker_peer1.edincollege.ac.uk
+    ${CONTAINER_CLI} volume rm  compose_orderer.ac.uk compose_peer0.edincollege.ac.uk compose_peer0.napier.ac.uk
     #Cleanup the chaincode containers
     clearContainers
     #Cleanup images
@@ -472,9 +466,9 @@ function networkDown() {
     # remove orderer block and other channel configuration transactions and certs
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf system-genesis-block/*.block organizations/peerOrganizations organizations/ordererOrganizations'
     ## remove fabric ca artifacts
-    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/napier.ac.uk/msp organizations/fabric-ca/napier.ac.uk/tls-cert.pem organizations/fabric-ca/napier.ac.uk/ca-cert.pem organizations/fabric-ca/napier.ac.uk/IssuerPublicKey organizations/fabric-ca/napier.ac.uk/IssuerRevocationPublicKey organizations/fabric-ca/napier.ac.uk/fabric-ca-server.db'
-    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/edincollege.ac.uk/msp organizations/fabric-ca/edincollege.ac.uk/tls-cert.pem organizations/fabric-ca/edincollege.ac.uk/ca-cert.pem organizations/fabric-ca/edincollege.ac.uk/IssuerPublicKey organizations/fabric-ca/edincollege.ac.uk/IssuerRevocationPublicKey organizations/fabric-ca/edincollege.ac.uk/fabric-ca-server.db'
-    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/orderer.ac.uk/msp organizations/fabric-ca/orderer.ac.uk/tls-cert.pem organizations/fabric-ca/orderer.ac.uk/ca-cert.pem organizations/fabric-ca/orderer.ac.uk/IssuerPublicKey organizations/fabric-ca/orderer.ac.uk/IssuerRevocationPublicKey organizations/fabric-ca/orderer.ac.uk/fabric-ca-server.db'
+    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/napier/msp organizations/fabric-ca/napier/tls-cert.pem organizations/fabric-ca/napier/ca-cert.pem organizations/fabric-ca/napier/IssuerPublicKey organizations/fabric-ca/napier/IssuerRevocationPublicKey organizations/fabric-ca/napier/fabric-ca-server.db'
+    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/edincollege/msp organizations/fabric-ca/edincollege/tls-cert.pem organizations/fabric-ca/edincollege/ca-cert.pem organizations/fabric-ca/edincollege/IssuerPublicKey organizations/fabric-ca/edincollege/IssuerRevocationPublicKey organizations/fabric-ca/edincollege/fabric-ca-server.db'
+    ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf organizations/fabric-ca/ordererOrg/msp organizations/fabric-ca/ordererOrg/tls-cert.pem organizations/fabric-ca/ordererOrg/ca-cert.pem organizations/fabric-ca/ordererOrg/IssuerPublicKey organizations/fabric-ca/ordererOrg/IssuerRevocationPublicKey organizations/fabric-ca/ordererOrg/fabric-ca-server.db'
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf addOrg3/fabric-ca/org3/msp addOrg3/fabric-ca/org3/tls-cert.pem addOrg3/fabric-ca/org3/ca-cert.pem addOrg3/fabric-ca/org3/IssuerPublicKey addOrg3/fabric-ca/org3/IssuerRevocationPublicKey addOrg3/fabric-ca/org3/fabric-ca-server.db'
     # remove channel and script artifacts
     ${CONTAINER_CLI} run --rm -v "$(pwd):/data" busybox sh -c 'cd /data && rm -rf channel-artifacts log.txt *.tar.gz'
@@ -630,7 +624,7 @@ while [[ $# -ge 1 ]] ; do
   -ccqc )
     CC_QUERY_CONSTRUCTOR="$2"
     shift
-    ;;
+    ;;    
   * )
     errorln "Unknown flag: $key"
     printHelp

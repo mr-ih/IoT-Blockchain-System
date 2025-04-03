@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 source scripts/utils.sh
 
-CHANNEL_NAME=${1:-"ac-uk"}
+CHANNEL_NAME=${1:-"iotchannel"}
 CC_NAME=${2}
 CC_SRC_PATH=${3}
 CC_SRC_LANGUAGE=${4}
@@ -69,14 +69,14 @@ function checkPrereqs() {
 checkPrereqs
 
 ## package the chaincode
-./scripts/packageCC.sh $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION
+./scripts/packageCC.sh $CC_NAME $CC_SRC_PATH $CC_SRC_LANGUAGE $CC_VERSION 
 
 PACKAGE_ID=$(peer lifecycle chaincode calculatepackageid ${CC_NAME}.tar.gz)
 
-## Install chaincode on peer0.Napier and peer0.Edincollege
-infoln "Installing chaincode on peer0.Napier..."
+## Install chaincode on peer0.1 and peer0.2
+infoln "Installing chaincode on peer0.1..."
 installChaincode 1
-infoln "Install chaincode on peer0.Edincollege..."
+infoln "Install chaincode on peer0.2..."
 installChaincode 2
 
 resolveSequence

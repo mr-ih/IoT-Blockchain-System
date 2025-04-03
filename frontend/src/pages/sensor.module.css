@@ -1,0 +1,21 @@
+/* src/pages/sensor.module.css */
+
+/* Example CSS module for Sensors page */
+
+.dashboard {
+  display: flex;
+}
+
+.chart-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* example layout */
+  gap: 16px;
+}
+
+.chart {
+  background-color: #fff;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}

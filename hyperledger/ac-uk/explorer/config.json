@@ -1,0 +1,9 @@
+{
+	"network-configs": {
+		"ac_uk": {
+			"name": "Academic Network",
+			"profile": "./connection-profile/ac_uk.json"
+		}
+	},
+	"license": "Apache-2.0"
+}

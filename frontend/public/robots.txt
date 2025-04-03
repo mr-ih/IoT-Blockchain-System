@@ -1,3 +1,11 @@
-# https://www.robotstxt.org/robotstxt.html
+# robots.txt for IoT Blockchain Security Project
+# Learn more: https://www.robotstxt.org/robotstxt.html
+
 User-agent: *
-Disallow:
+Disallow: /admin/       # Prevents access to admin panel
+Disallow: /api/         # Restricts access to API endpoints
+Disallow: /config/      # Prevents access to sensitive configuration files
+Disallow: /node_modules # Restricts access to dependencies
+
+Allow: /                # Allows access to the rest of the website
+Sitemap: /sitemap.xml   # Specifies the location of the sitemap

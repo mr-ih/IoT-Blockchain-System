@@ -6,9 +6,9 @@
     },
     "names": [
         {
-            "C": "IN",
-            "ST": "Delhi",
-            "L": "Aero city",
+            "C": "UK",
+            "ST": "Scotland",
+            "L": "Edinburgh",
             "O": "cfssl",
             "OU": "Fabric"
         }

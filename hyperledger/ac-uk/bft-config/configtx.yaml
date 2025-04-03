@@ -22,7 +22,7 @@ Organizations:
     # ID to load the MSP definition as
     ID: OrdererMSP
     # MSPDir is the filesystem path which contains the MSP configuration
-    MSPDir: ../organizations/ordererOrganizations/orderer.ac.uk/msp
+    MSPDir: ../organizations/ordererOrganizations/ac.uk/msp
     # Policies defines the set of policies at this level of the config tree
     # For organization policies, their canonical path is usually
     #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
@@ -37,10 +37,13 @@ Organizations:
         Type: Signature
         Rule: "OR('OrdererMSP.admin')"
     OrdererEndpoints:
-      - napier.orderer.ac.uk:9051
-      - edincollege.orderer.ac.uk:9052
-
-  - &Napier
+      - orderer.ac.uk:7050
+      - orderer2.ac.uk:7052
+      - orderer3.ac.uk:7056
+      - orderer4.ac.uk:7058
+  - &Org1
+    # DefaultOrg defines the organization which is used in the sampleconfig
+    # of the fabric.git development environment
     Name: NapierMSP
     # ID to load the MSP definition as
     ID: NapierMSP
@@ -61,13 +64,7 @@ Organizations:
       Endorsement:
         Type: Signature
         Rule: "OR('NapierMSP.peer')"
-    AnchorPeers:
-      - Host: peer0.napier.ac.uk
-        Port: 7051
-      - Host: peer1.napier.ac.uk
-        Port: 7052
-
-  - &Edincollege
+  - &Org2
     # DefaultOrg defines the organization which is used in the sampleconfig
     # of the fabric.git development environment
     Name: EdincollegeMSP
@@ -90,12 +87,6 @@ Organizations:
       Endorsement:
         Type: Signature
         Rule: "OR('EdincollegeMSP.peer')"
-      AnchorPeers:
-        - Host: peer0.edincollege.ac.uk
-          Port: 8051
-        - Host: peer1.edincollege.ac.uk
-          Port: 8052
-
 ################################################################################
 #
 #   SECTION: Capabilities
@@ -120,13 +111,13 @@ Capabilities:
   # supported by both.
   # Set the value of the capability to true to require it.
   Channel: &ChannelCapabilities
-    # V2_0 capability ensures that orderers and peers behave according
-    # to v2.0 channel capabilities. Orderers and peers from
-    # prior releases would behave in an incompatible way, and are therefore
-    # not able to participate in channels at v2.0 capability.
-    # Prior to enabling V2.0 channel capabilities, ensure that all
-    # orderers and peers on a channel are at v2.0.0 or later.
-    V2_0: true
+    # V3.0 for Channel is a catchall flag for behavior which has been
+    # determined to be desired for all orderers and peers running at the v3.0.0
+    # level, but which would be incompatible with orderers and peers from
+    # prior releases.
+    # Prior to enabling V3.0 channel capabilities, ensure that all
+    # orderers and peers on a channel are at v3.0.0 or later.
+    V3_0: true
   # Orderer capabilities apply only to the orderers, and may be safely
   # used with prior release peers.
   # Set the value of the capability to true to require it.
@@ -189,14 +180,6 @@ Application: &ApplicationDefaults
 #
 ################################################################################
 Orderer: &OrdererDefaults
-  # Addresses used to be the list of orderer addresses that clients and peers
-  # could connect to.  However, this does not allow clients to associate orderer
-  # addresses and orderer organizations which can be useful for things such
-  # as TLS validation.  The preferred way to specify orderer addresses is now
-  # to include the OrdererEndpoints item in your org definition
-  Addresses:
-    - napier.orderer.ac.uk:9051
-    - edincollege.orderer.ac.uk:9052
   # Batch Timeout: The amount of time to wait before creating a batch
   BatchTimeout: 2s
   # Batch Size: Controls the number of messages batched into a block
@@ -270,27 +253,60 @@ Channel: &ChannelDefaults
 #
 ################################################################################
 Profiles:
-  ChannelUsingRaft:
+  ChannelUsingBFT:
     <<: *ChannelDefaults
     Orderer:
       <<: *OrdererDefaults
-      OrdererType: etcdraft
-      EtcdRaft:
-        Consenters:
-          - Host: napier.orderer.ac.uk
-            Port: 9051
-            ClientTLSCert: ../organizations/ordererOrganizations/orderer.ac.uk/orderers/napier.orderer.ac.uk/tls/server.crt
-            ServerTLSCert: ../organizations/ordererOrganizations/orderer.ac.uk/orderers/napier.orderer.ac.uk/tls/server.crt
-          - Host: edincollege.orderer.ac.uk
-            Port: 9052
-            ClientTLSCert: ../organizations/ordererOrganizations/orderer.ac.uk/orderers/edincollege.orderer.ac.uk/tls/server.crt
-            ServerTLSCert: ../organizations/ordererOrganizations/orderer.ac.uk/orderers/edincollege.orderer.ac.uk/tls/server.crt
       Organizations:
         - *OrdererOrg
       Capabilities: *OrdererCapabilities
+      OrdererType: BFT
+      SmartBFT:
+        RequestBatchMaxCount: 100
+        RequestBatchMaxInterval: 50ms
+        RequestForwardTimeout: 2s
+        RequestComplainTimeout: 20s
+        RequestAutoRemoveTimeout: 3m0s
+        ViewChangeResendInterval: 5s
+        ViewChangeTimeout: 20s
+        LeaderHeartbeatTimeout: 1m0s
+        CollectTimeout: 1s
+        RequestBatchMaxBytes: 10485760
+        IncomingMessageBufferSize: 200
+        RequestPoolSize: 100000
+        LeaderHeartbeatCount: 10
+      ConsenterMapping:
+        - ID: 1
+          Host: orderer.ac.uk
+          Port: 7050
+          MSPID: OrdererMSP
+          Identity: ../organizations/ordererOrganizations/ac.uk/orderers/orderer.ac.uk/msp/signcerts/orderer.ac.uk-cert.pem
+          ClientTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer.ac.uk/tls/server.crt
+          ServerTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer.ac.uk/tls/server.crt
+        - ID: 2
+          Host: orderer2.ac.uk
+          Port: 7052
+          MSPID: OrdererMSP
+          Identity: ../organizations/ordererOrganizations/ac.uk/orderers/orderer2.ac.uk/msp/signcerts/orderer2.ac.uk-cert.pem
+          ClientTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer2.ac.uk/tls/server.crt
+          ServerTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer2.ac.uk/tls/server.crt
+        - ID: 3
+          Host: orderer3.ac.uk
+          Port: 7056
+          MSPID: OrdererMSP
+          Identity: ../organizations/ordererOrganizations/ac.uk/orderers/orderer3.ac.uk/msp/signcerts/orderer3.ac.uk-cert.pem
+          ClientTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer3.ac.uk/tls/server.crt
+          ServerTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer3.ac.uk/tls/server.crt
+        - ID: 4
+          Host: orderer4.ac.uk
+          Port: 7058
+          MSPID: OrdererMSP
+          Identity: ../organizations/ordererOrganizations/ac.uk/orderers/orderer4.ac.uk/msp/signcerts/orderer4.ac.uk-cert.pem
+          ClientTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer4.ac.uk/tls/server.crt
+          ServerTLSCert: ../organizations/ordererOrganizations/ac.uk/orderers/orderer4.ac.uk/tls/server.crt
     Application:
       <<: *ApplicationDefaults
       Organizations:
-        - *Napier
-        - *Edincollege
+        - *Org1
+        - *Org2
       Capabilities: *ApplicationCapabilities

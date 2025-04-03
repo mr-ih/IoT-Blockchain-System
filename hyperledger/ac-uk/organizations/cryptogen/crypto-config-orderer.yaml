@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: orderer.ac.uk
+    Domain: ac.uk
     EnableNodeOUs: true
 
 
@@ -19,11 +19,15 @@ OrdererOrgs:
     # "Specs" - See PeerOrgs for complete description
     # ---------------------------------------------------------------------------
     Specs:
-      - Hostname: napier
+      - Hostname: orderer
         SANS:
           - localhost
-          - 127.0.0.1
-      - Hostname: edincollege
+      - Hostname: orderer2
         SANS:
           - localhost
-          - 127.0.0.1
+      - Hostname: orderer3
+        SANS:
+          - localhost
+      - Hostname: orderer4
+        SANS:
+          - localhost

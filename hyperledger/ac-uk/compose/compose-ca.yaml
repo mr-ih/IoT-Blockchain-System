@@ -3,22 +3,21 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '3.7'
+
 
 networks:
-  ac-uk:
-    name: ac.uk
+  ac.uk:
+    name: ac_uk
 
 services:
 
-  ca.napier.ac.uk:
+  ca_napier:
     image: hyperledger/fabric-ca:latest
-    container_name: ca.napier.ac.uk
     labels:
       service: hyperledger-fabric
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-napier.ac.uk
+      - FABRIC_CA_SERVER_CA_NAME=ca-napier
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=7054
       - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:17054
@@ -27,18 +26,18 @@ services:
       - "17054:17054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../organizations/fabric-ca/napier.ac.uk:/etc/hyperledger/fabric-ca-server
+      - ../organizations/fabric-ca/napier:/etc/hyperledger/fabric-ca-server
+    container_name: ca_napier.ac.uk
     networks:
-      - ac-uk
+      - ac.uk
 
-  ca.edincollege.ac.uk:
+  ca_edincollege:
     image: hyperledger/fabric-ca:latest
-    container_name: ca.edincollege.ac.uk
     labels:
       service: hyperledger-fabric
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-edincollege.ac.uk
+      - FABRIC_CA_SERVER_CA_NAME=ca-edincollege
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_PORT=8054
       - FABRIC_CA_SERVER_OPERATIONS_LISTENADDRESS=0.0.0.0:18054
@@ -47,13 +46,13 @@ services:
       - "18054:18054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../organizations/fabric-ca/edincollege.ac.uk:/etc/hyperledger/fabric-ca-server
+      - ../organizations/fabric-ca/edincollege:/etc/hyperledger/fabric-ca-server
+    container_name: ca_edincollege.ac.uk
     networks:
-      - ac-uk
+      - ac.uk
 
-  ca.orderer.ac.uk:
+  ca_orderer:
     image: hyperledger/fabric-ca:latest
-    container_name: ca.orderer.ac.uk
     labels:
       service: hyperledger-fabric
     environment:
@@ -67,6 +66,7 @@ services:
       - "19054:19054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
     volumes:
-      - ../organizations/fabric-ca/orderer.ac.uk:/etc/hyperledger/fabric-ca-server
+      - ../organizations/fabric-ca/ordererOrg:/etc/hyperledger/fabric-ca-server
+    container_name: ca_orderer.ac.uk
     networks:
-      - ac-uk
+      - ac.uk

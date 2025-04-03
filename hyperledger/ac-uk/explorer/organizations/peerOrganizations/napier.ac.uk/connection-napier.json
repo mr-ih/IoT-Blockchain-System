@@ -1,0 +1,49 @@
+{
+    "name": "napier-ac-uk",
+    "version": "1.0.0",
+    "client": {
+      "organization": "napier",
+      "connection": {
+        "timeout": {
+          "peer": {
+            "endorser": "300"
+          }
+        }
+      }
+    },
+    "organizations": {
+      "Orgnapier": {
+        "mspid": "${ORGMSP}",
+        "peers": [
+          "peer0.napier.ac.uk"
+        ],
+        "certificateAuthorities": [
+          "ca.napier.ac.uk"
+        ]
+      }
+    },
+    "peers": {
+      "peer0.napier.ac.uk": {
+        "url": "grpcs://localhost:7051",
+        "tlsCACerts": {
+          "pem": "-----BEGIN CERTIFICATE-----\nMIICETCCAbegAwIBAgIUGG/9UZmgWKaDcSSEHCJFFEqDhe8wCgYIKoZIzj0EAwIw\nZTELMAkGA1UEBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGlu\nYnVyZ2gxFTATBgNVBAoTDG5hcGllci5hYy51azEYMBYGA1UEAxMPY2EubmFwaWVy\nLmFjLnVrMB4XDTI1MDMzMTAyMzYwMFoXDTQwMDMyNzAyMzYwMFowZTELMAkGA1UE\nBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGluYnVyZ2gxFTAT\nBgNVBAoTDG5hcGllci5hYy51azEYMBYGA1UEAxMPY2EubmFwaWVyLmFjLnVrMFkw\nEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEl9mabBkXXXcrV8IEgAzt/Vfq34iMDEXn\nAkmhWgS0Ag78/OSuU/cCVJKptFJi7FUnz3SOm6VvvxcMcpqvbakfj6NFMEMwDgYD\nVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYEFCTZi2DC\nY/LCY+UI7/nZoUTuiz93MAoGCCqGSM49BAMCA0gAMEUCIQDcjePOS0N5RmBd4XSR\n1t8DLkBxzDJmWOkqojPFi4kUqQIgMEUi1gBCOHEXTbT8JfQO5ib8f0WTY0McJJER\nf3usb/E=\n-----END CERTIFICATE-----\n"
+        },
+        "grpcOptions": {
+          "ssl-target-name-override": "peer0.napier.ac.uk",
+          "hostnameOverride": "peer0.napier.ac.uk"
+        }
+      }
+    },
+    "certificateAuthorities": {
+      "ca.napier.ac.uk": {
+        "url": "https://localhost:7054",
+        "caName": "ca-napier",
+        "tlsCACerts": {
+          "pem": ["-----BEGIN CERTIFICATE-----\nMIICETCCAbegAwIBAgIUGG/9UZmgWKaDcSSEHCJFFEqDhe8wCgYIKoZIzj0EAwIw\nZTELMAkGA1UEBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGlu\nYnVyZ2gxFTATBgNVBAoTDG5hcGllci5hYy51azEYMBYGA1UEAxMPY2EubmFwaWVy\nLmFjLnVrMB4XDTI1MDMzMTAyMzYwMFoXDTQwMDMyNzAyMzYwMFowZTELMAkGA1UE\nBhMCVUsxETAPBgNVBAgTCFNjb3RsYW5kMRIwEAYDVQQHEwlFZGluYnVyZ2gxFTAT\nBgNVBAoTDG5hcGllci5hYy51azEYMBYGA1UEAxMPY2EubmFwaWVyLmFjLnVrMFkw\nEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEl9mabBkXXXcrV8IEgAzt/Vfq34iMDEXn\nAkmhWgS0Ag78/OSuU/cCVJKptFJi7FUnz3SOm6VvvxcMcpqvbakfj6NFMEMwDgYD\nVR0PAQH/BAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYEFCTZi2DC\nY/LCY+UI7/nZoUTuiz93MAoGCCqGSM49BAMCA0gAMEUCIQDcjePOS0N5RmBd4XSR\n1t8DLkBxzDJmWOkqojPFi4kUqQIgMEUi1gBCOHEXTbT8JfQO5ib8f0WTY0McJJER\nf3usb/E=\n-----END CERTIFICATE-----\n"]
+        },
+        "httpOptions": {
+          "verify": false
+        }
+      }
+    }
+  }

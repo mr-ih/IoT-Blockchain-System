@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# imports
+# imports  
 . scripts/envVar.sh
 
 CHANNEL_NAME="$1"
@@ -8,7 +8,7 @@ DELAY="$2"
 MAX_RETRY="$3"
 VERBOSE="$4"
 BFT="$5"
-: ${CHANNEL_NAME:="edinnap-channel"}
+: ${CHANNEL_NAME:="iotchannel"}
 : ${DELAY:="3"}
 : ${MAX_RETRY:="5"}
 : ${VERBOSE:="false"}
@@ -92,7 +92,7 @@ joinChannel() {
 
 setAnchorPeer() {
   ORG=$1
-  . scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME
+  . scripts/setAnchorPeer.sh $ORG $CHANNEL_NAME 
 }
 
 ## Create channel genesis block
@@ -113,15 +113,15 @@ createChannel $BFT
 successln "Channel '$CHANNEL_NAME' created"
 
 ## Join all the peers to the channel
-infoln "Joining napier peer to the channel..."
+infoln "Joining Napier peer to the channel..."
 joinChannel 1
-infoln "Joining edincollege peer to the channel..."
+infoln "Joining Edincollege peer to the channel..."
 joinChannel 2
 
 ## Set the anchor peers for each org in the channel
-infoln "Setting anchor peer for napier..."
+infoln "Setting anchor peer for Napier..."
 setAnchorPeer 1
-infoln "Setting anchor peer for edincollege..."
+infoln "Setting anchor peer for Edincollege..."
 setAnchorPeer 2
 
 successln "Channel '$CHANNEL_NAME' joined"

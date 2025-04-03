@@ -1,0 +1,48 @@
+{
+	"name": "Academic Network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": true,
+		"adminCredential": {
+			"id": "exploreradmin",
+			"password": "exploreradminpw"
+		},
+		"enableAuthentication": true,
+		"organization": "NapierMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"mychannel": {
+			"peers": {
+				"peer0.napier.ac.uk": {}
+			}
+		}
+	},
+	"organizations": {
+		"NapierMSP": {
+			"mspid": "NapierMSP",
+			"adminPrivateKey": {
+				"path":  "/tmp/crypto/peerOrganizations/napier.ac.uk/users/Admin@napier.ac.uk/msp/keystore/<your_key_filename>.pem"
+			},
+			"peers": ["peer0.napier.ac.uk"],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/napier.ac.uk/users/Admin@napier.ac.uk/msp/signcerts/Admin@napier.ac.uk-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"peer0.napier.ac.uk": {
+			"tlsCACerts": {
+				"path": "/tmp/crypto/peerOrganizations/napier.ac.uk/peers/peer0.napier.ac.uk/tls/ca.crt"
+			},
+			"url": "grpcs://peer0.napier.ac.uk:7051"
+		}
+	}
+}

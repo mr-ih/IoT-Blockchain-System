@@ -1,0 +1,16 @@
+/* src/components/tables/SensorEventTable.css */
+
+/* Example styles for SensorEventsTable */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  /* Add additional styles as needed */

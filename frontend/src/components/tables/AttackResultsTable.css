@@ -1,0 +1,61 @@
+/* src/components/tables/AttackResultsTable.css */
+.attack-results-container {
+    margin: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  .download-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+  }
+  
+  .download-buttons button {
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .download-buttons button:hover {
+    background-color: #0056b3;
+  }
+  
+  .attack-results-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .attack-results-table th,
+  .attack-results-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .attack-results-table th {
+    background-color: #f4f4f4;
+  }
+  
+  .badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .badge-pass {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .badge-fail {
+    background-color: #f8d7da;
+    color: #721c24;
+  }

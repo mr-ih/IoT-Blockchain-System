@@ -9,9 +9,9 @@
 # ---------------------------------------------------------------------------
 PeerOrgs:
   # ---------------------------------------------------------------------------
-  # napier
+  # Napier
   # ---------------------------------------------------------------------------
-  - Name: napier
+  - Name: Napier
     Domain: napier.ac.uk
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
@@ -30,8 +30,8 @@ PeerOrgs:
     #                 which obtains its values from the Spec.Hostname and
     #                 Org.Domain, respectively.
     # ---------------------------------------------------------------------------
-    #   - Hostname: foo # implicitly "foo.napier.com"
-    #     CommonName: foo27.org5.example.com # overrides Hostname-based FQDN set above
+    #   - Hostname: foo # implicitly "foo.Napier.ac.uk"
+    #     CommonName: foo27.org5.ac.uk # overrides Hostname-based FQDN set above
     #   - Hostname: bar
     #   - Hostname: baz
     # ---------------------------------------------------------------------------
@@ -46,8 +46,8 @@ PeerOrgs:
     # sections and the aggregate nodes will be created for you.  Take care with
     # name collisions
     # ---------------------------------------------------------------------------
-    Template: 
-      Count: 2
+    Template:
+      Count: 1
       SANS:
         - localhost
       # Start: 5
@@ -58,4 +58,4 @@ PeerOrgs:
     # Count: The number of user accounts _in addition_ to Admin
     # ---------------------------------------------------------------------------
     Users:
-      Count: 2
+      Count: 1
